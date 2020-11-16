@@ -62,16 +62,37 @@
 %\includepdf{cover}
 \tableofcontents
 \newpage
-\section{值的类型与输出}
+\section{无重复排序}
 \begin{lstlisting}
-printInt(100);
-printReal(3.5);
-printString("Hello, world!");
+val N = getInt();
+val A = getIntTable(N);
+
+fun merge([], ys) = ys : int list
+  | merge(xs, []) = xs
+  | merge(x::xs, y::ys) = 
+    if x < y then x::merge(xs, y::ys)
+             else y::merge(x::xs, ys);
+
+fun mergesort xs = 
+    let fun sort(0, xs) = ([], xs)
+          | sort(1, x::xs) = ([x], xs)
+          | sort(n, xs) = 
+                let val (l1, xs1) = sort((n+1) div 2, xs)
+                    val (l2, xs2) = sort(n div 2, xs1)
+                in (merge (l1,l2), xs2)
+                end 
+        val (l, _) = sort (length xs, xs)
+    in l end;
+
+val B = mergesort(A);
+printIntTable(B);
 \end{lstlisting}
 \subsection{本关任务}
 给出一个具有$N$个互不相同元素的数组，请对它进行升序排序。
 \subsection{解法}
-我们可以采用归并排序算法解决，即
+我们可以采用归并排序算法解决。
+将数据分为
+即
 \begin{algorithm}
 \SetAlgoLined
 MergeSort($\langle a_n\rangle$) =\par
@@ -88,48 +109,114 @@ Merge($L, R$)}}
 W=O(n\log n)\quad S=O(\log^2n)
 \]
 
-\section{更大的斐波那契数列}
+\section{最短路}
 \subsection{本关任务}
-编写一个能计算任意大小斐波那契数列的程序。
+给定一个带权无向图，一个源点，权值在边上。计算从源点到其他各点的最短路径。
 \subsection{解法}
-可以采用矩阵快速幂的方法快速计算斐波那契序列。
+可以采用Dijkstra算法解决该问题。
+
+利用二维数组保存两点之间的路径长度，即$A[i][j]$即是编号为$i-1$和$j-1$点之间的路径长度。若无给定长度，则用$\infty$来表示无法两点之间无法到达。创建一个一维数组dis，用以储存源点到每个点的距离。并且集合B为中只有源点a。
+
+(1)在dis数组中寻找一个长度最短的值dis[k]，并且保证k点不在集合B中。
+
+(2)再对每个不属于B集合中的点进行长度收缩:如果dis[i]的值dis[k]+A[a][k]的大小，就将dis[i]的值更新为dis[k]+A[a][k]。将k也加入集合B中。
+
+(3)重复上述步骤，直至集合B中有所有点。得到的数组dis的值就是源点到所有对应点的最短路径值。
+
+在SML实际编写程序中，我用99999来替代$\infty$，在比较长度的过程中也方便运算。在最后输出最短路之前，再将所有长度为99999的数据转化成~1说明没有此路径。
+\subsection{分析与证明}
+Dijkstra算法使用的迭代不超过$n-1$次，在每次迭代的运算中，即比较与更新一共不超过$2(n-1)$次，因此$W=O(n^2)$。每一次的迭代都不能并行运算，但是在每一次的迭代中的比较与收缩长度操作可以同时进行，因此$S=O(n)+1$。
+\subsection{样例输入与输出}
+样例输入：
+\begin{lstlisting}
+7 11 5
+2 4 2
+1 4 3
+7 2 2
+3 4 3
+5 7 5
+7 3 3
+6 1 1
+6 3 4
+2 4 3
+5 6 3
+7 2 1
+\end{lstlisting}
+样例输出：
+\begin{lstlisting}
+4 6 7 7 0 3 5 
+\end{lstlisting}
+
+\section{最大括号距离}
+\subsection{本关任务}
+我们定义一个串s是闭合的，当且仅当它由'('和')'构成，而且满足以下条件之一：
+
+空串：这个串为空
+
+连接：这个串由两个闭合的串连接构成
+
+匹配：这个串是一个闭合的串外面包裹一个括号构成的
+
+现在给你一个串，你需要找出所有这个串中匹配的子串（一个闭合的串，并且外侧由括号包裹）中最长的那个，输出它的长度。
+\subsection{解法}
+现在采用一个stack函数来储存括号的栈。
+
+当栈为空时，判断下一个要入栈的括号的类型：如果是右括号，则必定不会有与之匹配的括号，直接丢弃该右括号；如果时左括号，就将左括号压栈。并在每次栈为空时更新当前最大的匹配括号长度。
+
+当栈不为空时，如果栈顶元素是左括号，即将压栈的括号是右括号，就直接弹出栈顶元素，并增加当前括号距离2。否则将新元素压栈。
+
+由于这种解法只能够解决括号串整体匹配和右括号多于左括号的情况，因此需要将原来的括号串每个元素置换并颠倒，得到新的最大匹配长度不变但括号冗余情况完全相反的括号串。两个串同时经过stack函数的处理，得到的最小的值就是括号匹配的最大的距离。
+
+关键函数stack的代码如下：
+\begin{lstlisting}
+fun stack([], _, maxpair, tmppair) = Int.max(maxpair, tmppair)
+  | stack(x::xs, [], maxpair, tmppair) = 
+        if(x=0) 
+            then stack(xs, [x], Int.max(maxpair, tmppair), 0)
+            else stack(xs, [], Int.max(maxpair, tmppair), 0)
+  | stack(x::xs, y::ys, maxpair, tmppair) = 
+        if((x=1) andalso (y=0)) 
+            then stack(xs, ys, maxpair, tmppair+2)
+            else stack(xs, x::y::ys, maxpair, tmppair);
+\end{lstlisting}
+\subsection{分析与证明}
+字符串元素的置换和反转都需要$O(n)$的$W$和$O(1)$、$O(n)$的$S$。
+
+stack函数只需要扫描整个list一遍，因此串行需要的$W$是$O(n)$，$S$也是$O(n)$。
+\subsection{样例输入与输出}
+样例输入：
+
+50 1 0 1 0 1 1 0 0 1 0 1 1 1 1 0 0 1 0 1 1 1 0 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 1 0 1 1 1 1 0 0 0
+
+样例输出：
+
+6
+\section{括号匹配}
+\subsection{本关任务}
+给定一个括号序列，判断它是否是匹配的。注意( ) ( ) 在本题也当做匹配处理。
+\subsection{解法}
+
+
+\subsection{分析与证明}
+\subsection{样例输入与输出}
+\section{高精度整数}
+\subsection{本关任务}
+给定两个任意精度的整数a和b，满足a$\geq$b，求出a+b, a−b, a×b的值。
+\subsection{解法}
 \begin{algorithm}
 \SetAlgoLined
-Fibonacci($n$) =\par
+Addition($[\ ],\ [\ ],\ c$) = $c$\par
+\eIf{$|a_n|=1$}{$a_1$}{
 \LetIn{
-$e\longleftarrow $[[1,1],[0,1]]\par
-$f(n,\ e)=$\par
-\eIf{$(n=1)$}{$e$}{\eIf{$n\ mod\ 2\ =\ 0$}{$f(n\ div\ 2,\ e\cdot e $)}{$e\cdot f((n-1)\ div\ 2,\ e\cdot e)$}}}
-{$List.nth(f(n)\cdot [1,0],\ 1)$}
-\caption{quickFibonacci}
-\end{algorithm}\\
-为计算第$n$个斐波那契数，从基础矩阵$e\ =\ [[1,1],[0,1]]$开始，若$n$为大于1的偶数，则将$e$更新为$e\cdot e$并将$n$整除$2$；若$n$为大于1的奇数，则在该步骤的返回值乘以$e$并更新参数$e\ =e\ \cdot e$，$n\ =\ n\ div\ 2$。直到$n$为1，则返回返回$f$中的第二个参数。
+$L\longleftarrow $ MergeSort($\langle a_1,\ a_2,\ \ldots,\ a_{(n+1)/2}\rangle$)\;
+$R\longleftarrow $ MergeSort($\langle a_{(n+1)/2},\ \ldots,\ a_{n}\rangle$)\;
+}{
+Addition($L, R$)}}
+\caption{Addition}
+\end{algorithm}
+
 \subsection{分析与证明}
-实现斐波那契数列的快速运算的矩阵快速幂用到的基础矩阵是[[1,1],[0,1]]的二阶矩阵。\\
-计算第$n$个数需要计算$\lceil logn\rceil$次，因此$W$为$logn$。由于无法并行运算，所以$S=logn$。
-
-
-
-\section{二分查找}
-\subsection{本关任务}
-给定一个长为$N$的递增序列，以及$Q$次查询，从这个序列里查找一些数是否存在。
-\subsection{解法}
-可以采用矩阵快速幂的方法快速计算斐波那契序列。
-\begin{algorithm}
-\SetAlgoLined
-Fibonacci($n$) =\par
-\LetIn{
-$e\longleftarrow $[[1,1],[0,1]]\par
-$f(n,\ e)=$\par
-\eIf{$(n=1)$}{$e$}{\eIf{$n\ mod\ 2\ =\ 0$}{$f(n\ div\ 2,\ e\cdot e $)}{$e\cdot f((n-1)\ div\ 2,\ e\cdot e)$}}}
-{$List.nth(f(n)\cdot [1,0],\ 1)$}
-\caption{quickFibonacci}
-\end{algorithm}\\
-为计算第$n$个斐波那契数，从基础矩阵$e\ =\ [[1,1],[0,1]]$开始，若$n$为大于1的偶数，则将$e$更新为$e\cdot e$并将$n$整除$2$；若$n$为大于1的奇数，则在该步骤的返回值乘以$e$并更新参数$e\ =e\ \cdot e$，$n\ =\ n\ div\ 2$。直到$n$为1，则返回返回$f$中的第二个参数。
-\subsection{分析与证明}
-实现斐波那契数列的快速运算的矩阵快速幂用到的基础矩阵是[[1,1],[0,1]]的二阶矩阵。\\
-计算第$n$个数需要计算$\lceil logn\rceil$次，因此$W$为$logn$。由于无法并行运算，所以$S=logn$。
-
+\subsection{样例输入与输出}
 \section{无重复排序}
 \subsection{本关任务}
 给出一个具有$N$个互不相同元素的数组，请对它进行升序排序。
