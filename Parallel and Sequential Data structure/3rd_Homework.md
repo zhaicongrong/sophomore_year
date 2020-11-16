@@ -86,6 +86,8 @@ union:
 $T_1$ doesn’t have to be perfectly balanced as we assumed
 A similar reasoning can be used to show that $T_1$ only has to be approximately balanced.
 
+想要达到$O(mlg\frac{n}{m})$ 的复杂度并不需要要求树$T_1$保持完全平衡，因为推导work的条件是work的递归式是leaf dominated的。因此只需要保证$T_1$大致是平衡的，即$T_1$的高度在$lg|T_1|$的线性范围内，都可以达到此推导出的复杂度。
+
 
 
 
