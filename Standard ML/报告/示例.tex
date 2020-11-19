@@ -2,6 +2,7 @@
 ]{ctexart}
 \usepackage[hidelinks]{hyperref}
 \usepackage{bm}
+\usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{pdfpages}
 \usepackage{amsmath}
@@ -203,25 +204,53 @@ stack函数只需要扫描整个list一遍，因此串行需要的$W$是$O(n)$�
 \subsection{本关任务}
 给定两个任意精度的整数a和b，满足a$\geq$b，求出a+b, a−b, a×b的值。
 \subsection{解法}
+加法的计算：
+将个数列进行翻转，即将两个数的最后一位对齐，做相应的加法。
 \begin{algorithm}
 \SetAlgoLined
-Addition($[\ ],\ [\ ],\ c$) = $c$\par
-\eIf{$|a_n|=1$}{$a_1$}{
+$a=(a_1a_2a_3...a_n)_{10}$\par
+$b=(b_1b_2b_3...a_m)_{10}$\par
+带入该函数时需要将$a$和$b$进行翻转。\par
+Addition($a,\ b,\ result,\ c,\ i$) = \par
+\eIf{$(a_i\ =\ 0\ andalso\ b_i\ =\ 0)$}{$result_i\ =\ c$}{
 \LetIn{
-$L\longleftarrow $ MergeSort($\langle a_1,\ a_2,\ \ldots,\ a_{(n+1)/2}\rangle$)\;
-$R\longleftarrow $ MergeSort($\langle a_{(n+1)/2},\ \ldots,\ a_{n}\rangle$)\;
+$result_i$ = $a_i$ + $b_i$ + $c$\par
+$c$ = ($a_i$ + $b_i$ + $c$) mod 10\par
 }{
-Addition($L, R$)}}
+Addition($a,\ b,\ result,\ c,\ i+1$)}}
 \caption{Addition}
 \end{algorithm}
+减法的计算与加法同理，也是将最后一位对齐，从低位开始相减。
+\begin{algorithm}
+\SetAlgoLined
+$a=(a_1a_2a_3...a_n)_{10}$\par
+$b=(b_1b_2b_3...a_m)_{10}$\par
+
 
 \subsection{分析与证明}
 \subsection{样例输入与输出}
-\section{无重复排序}
+\section{素性测试}
 \subsection{本关任务}
-给出一个具有$N$个互不相同元素的数组，请对它进行升序排序。
+给定一个数$N$，判断它是否是素数。
 \subsection{解法}
-我们可以采用归并排序算法解决，即
+利用Miller-Rabin算法来判断数字是否是素数。
+
+费马小定理：当$p$为质数时，有$a^{p-1}\equiv 1(mod\ p)$。
+
+二次探测：如果$p$是一个素数，$0\ < x\ < p$，则方程$x^2\equiv 1(mod\ p)$的解为$x\ =\ 1$或$x\ =\ p\ -\ 1$。
+
+算法流程如下：
+
+输入一个数$x$。
+
+(1)当$x$是偶数或2时可以直接判断。
+
+(2)当$x$是奇数时，组一个比较小的质数$a$,计算$2^s\cdot t\ =\ x\ -\ 1$。
+
+(3)先算出$a^t$，然后进行$s$次平方进行二次探测。即如果在平方的过程中，当前数的平方模$x$与1同余并且该数不等于$1$或$x-1$，那么$x$就是合数，直接退出循环。
+
+(4)根据费马定理判断$a^{p-1}\equiv 1(mod\ p)$是否成立。如果成立，则从第(2)步重新挑选更大的质数$a$再次判断。
+
 \begin{algorithm}
 \SetAlgoLined
 MergeSort($\langle a_n\rangle$) =\par
@@ -232,7 +261,7 @@ $R\longleftarrow $ MergeSort($\langle a_{(n+1)/2},\ \ldots,\ a_{n}\rangle$)\;
 }{
 Merge($L, R$)}}
 \caption{MergeSort}
-\end{algorithm}\\
+\end{algorithm}
 复杂度为
 \[
 W=O(n\log n)\quad S=O(\log^2n)
