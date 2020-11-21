@@ -2,8 +2,6 @@ Exercise 10.11. What is the expected maximum value of throwing two dice?
 
 $E(X) = \frac{1}{6}\cdot  \frac{1}{6}\cdot 1+\ \frac{1}{6}\cdot \frac{2}{6}\cdot 2 +\frac{1}{6}\cdot \frac{3}{6}\cdot 3+\frac{1}{6}\cdot \frac{4}{6}\cdot 4+\frac{1}{6}\cdot \frac{5}{6}\cdot 5+\frac{1}{6}\cdot \frac{6}{6}\cdot 6=\frac{91}{36}$ 
 
-
-
 Exercise 10.20. Rewrite the quicksort algorithm so that it takes a comparison function $cmp\ :\ \alpha \times \alpha \rightarrow order$ and a sequence of type $\alpha \ seq$ , and only uses the comparison once when comparing the pivot with each key. The type $order$ is the set ${Less, Equal, Greater}$. 
 
 ```Standard ML
@@ -23,10 +21,7 @@ quicksort S =
 	in
 		R1 ++ s2 ++ R3
 	end;
-		
 ```
-
-
 
 12-1 Design an algorithm for inserting a given key into a BST.
 
@@ -46,8 +41,6 @@ insert(T, k) =
         	     | Node => insert(L, k)
 ```
 
-
-
 12-2 Design an algorithm for deleting a given key from a tree.
 
 ``` Standard ML
@@ -60,8 +53,6 @@ fun delete((L, k', R), k) =
 					then (L, k', delete(R, k))
 					else L||R	
 ```
-
-
 
 Exercise 12.13. Prove correct the functions intersection, difference, and union.
 
@@ -87,18 +78,14 @@ union:
 
 在$t_1$或$t_2$不为Leaf时，利用$t_1$的根节点对树$t_2$进行拆分。分别对$t_1 t_2$的左子树右子树递归地进行并集操作，并合并结果。union操作只会去除两棵树中重复地元素并只留下一个元素，保留了所有只出现一次的元素。因此该算法是正确的。
 
-
-
 $T_1$ doesn’t have to be perfectly balanced as we assumed
 A similar reasoning can be used to show that $T_1$ only has to be approximately balanced.
 
 想要达到$O(mlg\frac{n}{m})$ 的复杂度并不需要要求树$T_1$保持完全平衡，因为推导work的条件是work的递归式是leaf dominated的。因此只需要保证$T_1$大致是平衡的，即$T_1$的高度在$lg|T_1|$的线性范围内，都可以达到此推导出的复杂度。
 
-
-
 Exercise 12.17 Prove that if the priorities are unique, then there is exactly one tree structure that satisfies the Treap properties.
 
-
+对于一组(key, priority)的sequence，转化成treap之后的根节点肯定是唯一的（priority最大的作为根节点）。然后将根节点的key进行剩余节点的划分，因此组成根节点的左子树的sequence和组成根节点右子树的sequence也都是唯一的。如此递归推导下去可以推出，每一组(key, priority)的sequence都对应唯一的treap。
 
 
 

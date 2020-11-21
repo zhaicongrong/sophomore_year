@@ -204,8 +204,10 @@ stack函数只需要扫描整个list一遍，因此串行需要的$W$是$O(n)$�
 \subsection{本关任务}
 给定两个任意精度的整数a和b，满足a$\geq$b，求出a+b, a−b, a×b的值。
 \subsection{解法}
-加法的计算：
-将个数列进行翻转，即将两个数的最后一位对齐，做相应的加法。
+\subsubsection{加法的计算}
+将两个数列进行翻转，即将两个数的最后一位对齐，做相应的加法。
+
+如果两个数相加大于9，就将$c$置为1，在下一位上加上1。
 \begin{algorithm}
 \SetAlgoLined
 $a=(a_1a_2a_3...a_n)_{10}$\par
@@ -220,15 +222,68 @@ $c$ = ($a_i$ + $b_i$ + $c$) mod 10\par
 Addition($a,\ b,\ result,\ c,\ i+1$)}}
 \caption{Addition}
 \end{algorithm}
-减法的计算与加法同理，也是将最后一位对齐，从低位开始相减。
+\subsubsection{减法的计算}
+减法的计算与加法同理，也是将最后一位对齐，从低位开始相减。并用$c$来表示在下一位是否要退位，如果$a-b<0$。
+算法如下。
 \begin{algorithm}
 \SetAlgoLined
 $a=(a_1a_2a_3...a_n)_{10}$\par
 $b=(b_1b_2b_3...a_m)_{10}$\par
+带入该函数时需要将$a$和$b$进行翻转。\par
+Subtraction($a,\ b,\ result,\ c,\ i$) = \par
+\eIf{$(a_i\ =\ 0\ andalso\ b_i\ =\ 0)$}{$result_i\ =\ c$}{
+\LetIn{
+\eIf{$a_i-b_i+c\ <\ 0$}{
+$c$ = ($a_i$ - $b_i$ + $c$)\par
+$result_i\ =\ 10+a_i-b_i+c$
+}{$result_i\ =\ a_i-b_i+c$\par
+$c\ =\ 0$}
+}{
+Addition($a,\ b,\ result,\ c,\ i+1$)}}
+\caption{subtraction}
+\end{algorithm}
+\\
+\\
+\\
+\\
+\subsubsection{乘法的计算}
+先将多位数相乘转换为多个一位数与多位数相乘的乘法。
+
+与上述加法和减法的操作类似，从最末位开始相乘，并用$c$来记录下一位的进位数。
+
+对于第$k$位数完成乘法运算后还要在末尾加上$k-1$个零。
+
+再将所有得到的结果相加。
+
+\begin{lstlisting}
+fun onemultiply(a, [], c) = [c]
+  | onemultiply(a, b::bs, c) = 
+        if (a * b + c> 9) then ((a*b+c)mod 10)::onemultiply(a, bs, (a*b+c) div 10)
+                          else (a*b+c)::onemultiply(a, bs, 0);
+fun multiply([], bs) = [0]
+  | multiply(a::ass, bs) = 
+        Add(onemultiply(a, bs, 0), 0::multiply(ass, bs), 0);
+\end{lstlisting}
 
 
 \subsection{分析与证明}
+对于加法来说：$n$和$m$相加，需要线性扫描每一个数，因此$W=O(max(|n|,\ |m|)+1)$。对于最优并行算法来说，可以用map操作对对应位数的两个数字相加，并记录每一位需要进位的个数。再将进位数相应相加。重复操作，直到所有每一位的进位数都为0。所有的操作都是并行处理。
+
+在第一次各位数相加时，
+
+因此$S\ =\ O(logn)$。
+
+减法与加法同理，有同样的串行复杂度W。
 \subsection{样例输入与输出}
+样例输入：
+
+10 2 3 3 3 3 3 3 3 3 3 10 2 3 3 3 3 3 3 3 3 3
+
+样例输出：
+
+4 6 6 6 6 6 6 6 6 6 
+0 
+5 4 4 4 4 4 4 4 4 2 8 8 8 8 8 8 8 8 9 
 \section{素性测试}
 \subsection{本关任务}
 给定一个数$N$，判断它是否是素数。
@@ -253,7 +308,7 @@ $b=(b_1b_2b_3...a_m)_{10}$\par
 
 \begin{algorithm}
 \SetAlgoLined
-MergeSort($\langle a_n\rangle$) =\par
+MergeSort($\langle a_n\rangle$) = \par
 \eIf{$|a_n|=1$}{$a_1$}{
 \LetIn{
 $L\longleftarrow $ MergeSort($\langle a_1,\ a_2,\ \ldots,\ a_{(n+1)/2}\rangle$)\;
