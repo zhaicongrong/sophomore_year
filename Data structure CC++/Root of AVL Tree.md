@@ -74,7 +74,7 @@
 
    这里挑选RLrotation进行讲解：
 
-   ![1](C:\Users\ZHT\Desktop\1.png)
+   ![1](D:\sophomore_year\Data structure CC++\1.png)
 
    由于节点$t$导致了$T$节点的不平衡，因此需要调整$T$,$A$,和$t$三个节点的位置。因此要将$t$作为新的根节点，t的左子树变为$T$，$t$的右子树变为$A$。必须还要注意重新链接$t$原来的左子树和右子树，对应放到$T$的右子树上和$A$的左子树上。
 
