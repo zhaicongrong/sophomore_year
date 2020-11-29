@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
-string concatenate (string& a, string& b)
+/*string concatenate (string& a, string& b)
 {
     return a+b;
 }
@@ -17,5 +17,20 @@ int main()
     cout << "x: " << x << " y: " << y << " z: " << z << endl;
     duplicate(x, y, z);
     cout << "x: " << x << " y: " << y << " z: " << z << endl;
+    return 0;
+}*/
+template <class T>
+T sum (T a, T b)
+{
+    T result;
+    result = a + b;
+    return result;
+}
+int main()
+{
+    int k = sum<int>(1,2);
+    double j = sum<double>(2.4, 3.5);
+    cout << k << endl;
+    cout << j << endl;
     return 0;
 }

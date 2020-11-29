@@ -173,3 +173,129 @@ void duplicate(const int& a, int b, int c)
 
 ### overloads and templates
 
+两个函数可以有相同的名字，如果他们中的参数类型，参数个数是不同的话。
+
+`template <template-parameters> function-declaration`
+
+例子：
+
+```c++
+template <class SomeType>
+SomeType sum (SomeType a, SomeType b)
+{
+	return a+b;
+}
+```
+
+通过使用`name <template-arguments> (function-arguments)`来实现
+
+例如`x = sum<int>(10,20);`
+
+```c++
+int sum(int a, int b)
+{
+	return a+b;
+}
+```
+
+实际的例子
+
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+template <class T>
+T sum (T a, T b)
+{
+    T result;
+    result = a + b;
+    return result;
+}
+int main()
+{
+    int k = sum<int>(1,2);
+    double j = sum<double>(2.4, 3.5);
+    cout << k << endl;
+    cout << j << endl;
+    return 0;
+}
+
+```
+
+当然，一个函数中有两个不同类型的参数的时候，可以这么使用
+
+`template <class T, class U>`，则有函数的使用型式`are_equal<int, double>(10, 10.0)`。
+
+### name visibility
+
+- namespaces
+
+````c++
+namespace myNamespace
+{
+	int a, b;
+}
+````
+
+引用的时候就可以使用`myNameSpace::a`和`myNameSpace::b`。
+
+- using
+
+using 将一个常量指定为特定block中的常量
+
+例如
+
+```c++
+namespace first
+{
+	int x = 5;
+	int y = 6;
+}
+namespace seconde
+{
+	double x = 3.1416;
+	double y = 2.7183;
+}
+
+int main()
+{
+	using first::x;
+	using second::y;
+}
+```
+
+或者在main函数中使用using namespace first。直接调用所有first 的namespace中的元素。
+
+**using和suing namespace仅仅只在一个块中有效。**
+
+## 复合数据类型
+
+### 数组
+
+````
+#include <array>
+array<int, 3> myarray{10, 20, 30};
+````
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
