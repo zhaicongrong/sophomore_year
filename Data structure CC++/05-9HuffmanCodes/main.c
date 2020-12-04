@@ -104,23 +104,22 @@ int judge(int N, int f[], int CodeLen)
     T->weight = -1;
     for(int i = 0; i < N; i++)
     {
-        char c;
-        char s[N + 1];
+        char c, s[N + 1];
         getchar();
         scanf("%c %s", &c, s);
         int length = strlen(s);
-        if(length == 1)
-            flag = 0;
+        if(length > N) flag = 0;
         w += length * f[i];
         int j = 0;
         TNode tmp = T;
         while(s[j] != '\0')
         {
-            //printf("one!\n");
+            //printf("check:%c\n", s[j]);
             if(s[j] == '0')
             {
                 if(!tmp->Left)
                 {
+                    //printf("!\n");
                     tmp->Left = (TNode)malloc(sizeof(struct HuffmanTree));
                     tmp->Left->weight = -1;
                     tmp->Left->Left = tmp->Left->Right = NULL;
@@ -130,7 +129,7 @@ int judge(int N, int f[], int CodeLen)
                 {
                     if(tmp->Left->weight != -1) {
                         flag = 0;
-                        break;
+                        tmp = tmp->Left;
                     }
                     else
                         tmp = tmp->Left;
@@ -144,13 +143,13 @@ int judge(int N, int f[], int CodeLen)
                     tmp->Right->weight = -1;
                     tmp->Right->Right = tmp->Right->Left = NULL;
                     tmp = tmp->Right;
-
                 }
                 else
                 {
                     if(tmp->Right->weight != -1) {
+                        //printf("**warning**\n");
                         flag = 0;
-                        break;
+                        tmp = tmp->Right;
                     }
                     else
                         tmp = tmp->Right;
@@ -159,14 +158,19 @@ int judge(int N, int f[], int CodeLen)
             j++;
         }
         tmp->weight = i;
-        if(tmp->Left != NULL && tmp->Right != NULL)
+        if(tmp->Left != NULL || tmp->Right != NULL)
         {
             flag = 0;
+            //printf("!!warning\n");
         }
 
     }
-    if( w > CodeLen)
+    if(w > CodeLen)
+    {
         flag = 0;
+        //printf("!Not CodeLen\n");
+    }
+
     free(T);
     return flag;
 }
