@@ -1,0 +1,3 @@
+"D:\CLion 2020.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\05_9HuffmanCodes.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\05_9HuffmanCodes.dir/objects.a @CMakeFiles\05_9HuffmanCodes.dir\objects1.rsp
+C:\MinGW\bin\gcc.exe -g   -Wl,--whole-archive CMakeFiles\05_9HuffmanCodes.dir/objects.a -Wl,--no-whole-archive  -o 05_9HuffmanCodes.exe -Wl,--out-implib,lib05_9HuffmanCodes.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\05_9HuffmanCodes.dir\linklibs.rsp

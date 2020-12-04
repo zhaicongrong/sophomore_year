@@ -1,0 +1,3 @@
+D:/sophomore_year/Data structure CC++/05-9HuffmanCodes/cmake-build-debug/CMakeFiles/05_9HuffmanCodes.dir
+D:/sophomore_year/Data structure CC++/05-9HuffmanCodes/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/sophomore_year/Data structure CC++/05-9HuffmanCodes/cmake-build-debug/CMakeFiles/rebuild_cache.dir

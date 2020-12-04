@@ -1,0 +1,3 @@
+"D:\CLion 2020.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\04_6CompleteBinarySearchTree.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\04_6CompleteBinarySearchTree.dir/objects.a @CMakeFiles\04_6CompleteBinarySearchTree.dir\objects1.rsp
+C:\MinGW\bin\gcc.exe -g   -Wl,--whole-archive CMakeFiles\04_6CompleteBinarySearchTree.dir/objects.a -Wl,--no-whole-archive  -o 04_6CompleteBinarySearchTree.exe -Wl,--out-implib,lib04_6CompleteBinarySearchTree.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\04_6CompleteBinarySearchTree.dir\linklibs.rsp
