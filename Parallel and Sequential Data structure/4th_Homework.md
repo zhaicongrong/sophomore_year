@@ -31,17 +31,48 @@ In a BST $T$ where the root $v$ has two children, let $u$ and $w$ be the left an
 
 - **Left rotation** . Make $w$ the root of the tree.
 
-  ```
+  ```pascal
   fun leftRotation(v) = 
   	let
-  		val (L, k, R) = Node(v);
-  		val (L', k', R') = Node(R);
+  		val (u, k, w) = Node(v);
+  		val (L', k', R') = Node(w);
   	in
-  		makeNode(MakeNode())
-  		
+  		makeNode(makeNode(u, k, L'), k, R')
+  	end;		
   ```
 
   
 
 - **Right rotation**. Make $u$ the root of the tree.
+
+````pascal
+fun RightRotation(v) = 
+	let
+		val (u, k, w) = Node(v);
+		val (L', k', R') = Node(u);
+	in
+		makeNode(L', k', makeNode(R', k, w))
+	end;
+````
+
+#### 12-6  Size as reduced value
+
+Show that size information can be computed as a reduced value. What is the function to reduce over?
+
+我没有搞清楚reduced value的含义。
+
+```pascal
+fun size( T ) = 
+  case T of
+    TLeaf => 0
+    TNode(T) = (L, k, R) => size(L) + size(R) + 1;
+```
+
+#### 12-7 Implementing splitRank
+
+Implement the splitRank function.
+
+#### 12-8 Implementing select
+
+Implement the select function using splitRank.
 
