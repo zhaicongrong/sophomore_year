@@ -59,20 +59,123 @@ fun RightRotation(v) =
 
 Show that size information can be computed as a reduced value. What is the function to reduce over?
 
-我没有搞清楚reduced value的含义。
-
 ```pascal
-fun size( T ) = 
-  case T of
-    TLeaf => 0
-    TNode(T) = (L, k, R) => size(L) + size(R) + 1;
+type T = TLeaf
+	   | TNode of (T * K * Z * T);
+
+reducedVal T = 
+	case T of
+	  TLeaf => 0
+	| TNode(_, _, s, _) => s;
+
+makeNode (L, k, R) = 
+	let
+		s = reducedVal(L) + 1 + reducedVal(R)
+	in
+		TNode(L, k, s, R)
+	end;
+	   
 ```
 
 #### 12-7 Implementing splitRank
 
 Implement the splitRank function.
 
+```pascal
+fun splitRank(T, i) = 
+case T of = 
+    Leaf => (Leaf, -1, Leaf)
+  | Node(L, k, R) =>
+	case compare(k, i) of = 
+		LESS => 
+			let
+				(L', R') = splitRank(R, i);
+			in
+				(makeNode(L, k, L'), R')
+			end;
+		EQUAL => (L, R);
+		GREATER => 
+			let
+				(L', R') = splitRank(L, i);
+			in
+				(L, makeNode(R', k, R))
+			end;
+```
+
 #### 12-8 Implementing select
 
 Implement the select function using splitRank.
+
+```pascal
+fun select(T, i) = 
+	case T of
+		Leaf => Raise Exception of OutOfRange
+	  | Node(_, k, _) =>
+	  	let
+			(L, R) = splitRank(T, k)
+		in
+			case compare(|L|, i) of
+				LESS => select(R, i - 1 - |L|)
+				EQUAL => k
+				GREATER => select(L, i)
+		end;    		
+```
+
+#### Exercise 13.3. Convince yourself that there is no way to create an infinite sized set using the interface and with finite work.
+
+创建集合中的每一个元素都至少需要$O(1)$的work，因此如果需要创建一个无限大也需要无限大的work。无法通过sequence接口中的函数，通过有限的work进行创建。
+
+#### Exercise 12.8. Show that the work of the bulk operations is $O(n+m)$, i.e., never no more than the sum of the sizes of the inputs.
+
+由书本上得到的，intersect，union和difference的work都是$O(mlog(1+\frac{n}{m}))$。
+
+因此$O(mlog(1+\frac{n}{m}))\ <\ O(m\dot (1\ +\ \frac{n}{m})) = O(n\ +\ m)$
+
+因此不会大于输入的总长度。
+
+#### 12.10. What is the work and span of each of the implementations of fromSeq above.
+
+$fromseq A\ = \ I^{Set.insert\ \varnothing}\ A$ : 需要按照顺序地调用$|A|$次insert操作。并且无法进行并行操作，因此$W$和$S$都是$O(n)$的复杂度。
+
+$fromseq\ A = R^{Set.union\  \varnothing}\ A$：得到有关work的递归式：$W(n)\ =\ 2\cdot W(\frac{n}{2})\ +\ O(n)$， reduced操作将长为$n$的串分为两半再进行处理，最后归并时union操作需要的$W$为$O(mlog(1+\frac{n}{m})$，,因此得到work的复杂度时$O(n^2)$。
+
+得到有关span的递推式：$S(n)\ =\ S(\frac{n}{2})\ +\ O(n)$，因此得到$S(n)\ =\ O(n)$。
+
+#### Exercise 13.24. Describe how to implement previous and next using the other ordered set functions.
+
+`privious(S, A) = Select(S, Rank(S, A) - 1)`
+
+`next(S, A) = select(S, Rank(S, A) + 1)`
+
+#### 13-1 Cost of bulk operations
+
+Show that the work of the bulk operations, intersection, difference, and union is $O(n+m)$, where n and m are the sum of the sizes of the inputs.
+
+(同exercise. 12.8)
+
+#### 13-2 implementing fromseq
+
+What is the work and span of each of the implementations of fromSeq in Example 13.8.
+
+#### 13-3 Union on Different Sizes
+
+Based on the cost specification for Sets, what is the assymptotic work and span for taking the union of two sets one of size n and the other size $\sqrt{n}$? You can assume the comparison for sets takes constant work. Please simplify as much as possible.
+
+$W\ =\ O(nlog(1\ +\ \frac{m}{n}))\ =\ O(nlog(1+\frac{\sqrt{n}}{n}))$
+
+#### 13-4 Cost of Table Collect
+
+The following code implements Table.collect(S).
+
+$Seq.reduce (Table.union Seq.append) <> \{k-><v>:v\in S\}$
+
+Derive (tight) asymptotic upper bounds on the work and span for the code in terms of $n\ =\ |S|$. You can assume the comparison function used by the table takes constant work, and that the Sequence is a array sequence. You don't need a proof.
+
+
+
+
+
+
+
+
 

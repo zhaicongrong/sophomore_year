@@ -198,10 +198,22 @@ int sum(int a, int b)
 }
 ```
 
+```c++
+template <class T>
+void mySwap(T&a, T&b)
+{
+	T temp = a;
+	a = b;
+	b = temp;
+}
+```
+
+必须要确定T的类型，才可以使用模板。  
+
 实际的例子
 
 ```c++
-#include <iostream>
+     #include <iostream>
 #include <string>
 using namespace std;
 template <class T>
@@ -272,7 +284,7 @@ int main()
 
 ### 数组
 
-````
+````c++
 #include <array>
 array<int, 3> myarray{10, 20, 30};
 ````
@@ -281,13 +293,219 @@ array<int, 3> myarray{10, 20, 30};
 
 
 
+## 类
+
+1. 公共权限 public **成员 类内可以访问 类外可以访问**
+2. 保护权限 protected  **类外不可以访问 儿子可以访问父亲中的保护内容**
+
+1. 私有权限 private **类外不可以访问 儿子不可以访问父亲中的私有内容**
+
+class的默认权限是私有的。struct默认权限是公共。
 
 
 
+## 构造函数和析构函数
+
+### 构造函数语法
+
+`类名()[]`
+
+可以有参数，因此可以发生重载。
+
+返回值不写void。即使不写系统也会自动加上， 只是没有任何操作。
+
+创建对象时，自动调用函数只会调用函数一次。
+
+```c++
+public Person
+{
+	public:
+		Person()
+		{
+			cout << "" << endl;
+		}
+}
+```
+
+#### 构造函数分类
+
+无参构造（默认构造）和有参构造
+
+```c++
+person(int a)
+{
+    age = a;
+	...
+}
+```
+
+普通构造（默认构造）和拷贝构造
+
+拷贝构造
+
+```c++
+Person( const Person &p )
+{
+	age = p.age;
+	...
+}
+```
+
+实际情况
+
+```c++
+void test01()
+{
+	Person p1;//默认析构函数调用，注意，此处不需要加括号
+	Person p2(10);//有参构造函数
+    //相当于Person p2 = 10;
+	Person p3(ps);//拷贝构造函数调用
+}
+```
 
 
 
+### 析构函数
 
+`~类名()[]`
+
+不可以有参数。
+
+在哪一个函数体中执行，就在哪一个函数体运行 到最后的时候最后释放这个对象。
+
+````c++
+public Person
+{
+	public:
+		~Person()
+		{
+			cout << "" << endl;
+		}
+}
+````
+
+因此如果在main.c中创建在return 0之后才会执行，几乎看不到析构函数的执行效果
+
+
+
+## 函数
+
+普通函数会自动发生类型转换
+
+函数模板不会发生类型转换，在参数传递的时候，所以参数类型不同时必须要指定类型。
+
+### 类模板
+
+```c++
+template<class NameType, class AgeType>
+class Person
+{
+	public:
+		Person(NameType name, AgeType, age)
+		{
+			this->m_Name = name;
+			this->m_Age = age;
+		}
+		NameType m_Name;
+		AgeType m_Age;
+};
+
+void test01()
+{
+	Person<string, int>
+}
+```
+
+
+
+## stl
+
+### vector
+
+### vector容器的创建
+
+```c++
+vector<int> vectorInt;
+class Person
+{
+public:
+    Person(string name, int age)
+    {
+        this->m_Name = name;
+        this->m_Age = age;
+    }
+    string m_Name;
+    int m_Age;
+};
+vector<Person> v;//类的vector
+```
+
+### vector容器的处理
+
+```c++
+vector<type> v;
+v.pushback(..);
+vector<type>::iterator itBegin = v.begin();
+vector<type>::iterator itEnd = v.end();
+//遍历处理
+for(vector<type>::iterator it = v.begin(); it != v.end(); it++)
+	cout << (*it).name << endl;//注意，it是指针值。
+```
+
+对于指针的理解
+
+```c++
+void test02(void)
+{
+    vector<Person*> v;
+    Person p1("aaa", 10);
+    Person p2("eee", 20);
+    Person p3("bbb", 30);
+    Person p4("ddd", 40);
+    Person p5("ccc", 50);
+    v.push_back(&p1);
+    v.push_back(&p2);
+    v.push_back(&p3);
+    v.push_back(&p4);
+    v.push_back(&p5);
+    for(vector<Person*>::iterator it = v.begin(); it != v.end(); it++)
+        cout << "Name:" << (**it).m_Name << " Age:" << (**it).m_Age << endl;
+}
+```
+
+
+
+#### 容器中嵌套容器
+
+基本操作
+
+```c++
+vector<vector<int>> v;
+    vector<int> v1;
+    vector<int> v2;
+    vector<int> v3;
+    vector<int> v4;
+    for (int i = 0; i < 4; i++) {
+        v1.push_back(i + 1);
+        v2.push_back(i + 2);
+        v3.push_back(i + 3);
+        v4.push_back(i + 4);
+    }
+    v.push_back(v1);
+    v.push_back(v2);
+    v.push_back(v3);
+    v.push_back(v4);
+    for (vector<vector<int>>::iterator it = v.begin(); it != v.end(); it++)
+    {
+        for(vector<int>::iterator vit = (*it).begin(); vit != (*it).end(); vit++)
+            cout << *vit << "";
+        cout << endl;
+    }
+```
+
+## string容器
+
+是`char*`的容器。
 
 
 
