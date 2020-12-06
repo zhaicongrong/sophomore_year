@@ -507,9 +507,63 @@ vector<vector<int>> v;
 
 是`char*`的容器。
 
+#### string的构造函数
 
+1. 默认构造
 
+`string s1`
 
+2. 使用字符串s初始化
+
+`const char * str = "hello world";`
+
+`string s2(str);`
+
+有const是因为“hello world”是字符串常量，常量不可修改。
+
+3. 使用一个string对象初始化另一个string对象
+
+`string s3(s2);`
+
+4. 使用n个字符c初始化
+
+`string s4(10, 'a');`
+
+表示字符串有10个a。
+
+#### 赋值操作
+
+```c++
+	string str1;
+    str1 = "hello world";;
+    cout << "str1= " << str1 << endl;
+
+    string str2;
+    str2 = str1;//"hello world"
+
+    string str3;
+    str3 = 'a';
+
+    string str4;
+    str4.assign("hello c++");//利用assign赋值
+
+    string str5;
+    str5.assign("hello c++", 5);//取前5个字符
+    cout << str5 << endl;
+    
+    string str6;
+    str6.assign(str5);//拷贝构造
+    
+    string str7;
+    str7.assign(10, 'w');//wwwwwww
+```
+
+```c++
+str1 += str2; //两字符串相连
+str1.append(" which you would like to add "); //str1 += "..."
+str1.append(" game happy game", 6) //添加的是" game "
+str1.append(" game happy game", 4, 3) //截取第4个开始，截取3个字符
+```
 
 
 
