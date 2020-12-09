@@ -18,7 +18,7 @@ int main()
     scanf("%lld", &n);
     long long int a[4] = {0};
     long long int num = 0;
-    for(long long int i = 1; num < n; i++)
+    for(long long int i = 1; num < n; i++)//Ì«ÈÝÒ×´íÁË°É£¡
     {
         if(judge(i))
         {

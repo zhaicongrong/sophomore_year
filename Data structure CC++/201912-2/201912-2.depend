@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1607524149 source:d:\sophomore_year\data structure cc++\201912-2\main.cpp
+	<bits/stdc++.h>
+	<map>
+	<list>
+
