@@ -1,0 +1,3 @@
+"D:\CLion 2020.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\ageheightsort.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\ageheightsort.dir/objects.a @CMakeFiles\ageheightsort.dir\objects1.rsp
+C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\ageheightsort.dir/objects.a -Wl,--no-whole-archive  -o ageheightsort.exe -Wl,--out-implib,libageheightsort.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\ageheightsort.dir\linklibs.rsp

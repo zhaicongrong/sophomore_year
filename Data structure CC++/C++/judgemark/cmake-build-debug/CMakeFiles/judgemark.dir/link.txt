@@ -1,0 +1,3 @@
+"D:\CLion 2020.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\judgemark.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\judgemark.dir/objects.a @CMakeFiles\judgemark.dir\objects1.rsp
+C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\judgemark.dir/objects.a -Wl,--no-whole-archive  -o judgemark.exe -Wl,--out-implib,libjudgemark.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\judgemark.dir\linklibs.rsp

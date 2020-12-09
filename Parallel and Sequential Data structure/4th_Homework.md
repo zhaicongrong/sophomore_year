@@ -157,25 +157,41 @@ Show that the work of the bulk operations, intersection, difference, and union i
 
 What is the work and span of each of the implementations of fromSeq in Example 13.8.
 
+(Exercise. 12.10)
+
 #### 13-3 Union on Different Sizes
 
 Based on the cost specification for Sets, what is the assymptotic work and span for taking the union of two sets one of size n and the other size $\sqrt{n}$? You can assume the comparison for sets takes constant work. Please simplify as much as possible.
 
-$W\ =\ O(nlog(1\ +\ \frac{m}{n}))\ =\ O(nlog(1+\frac{\sqrt{n}}{n}))$
+$W\ =\ O(nlog(1\ +\ \frac{m}{n}))\ =\ O(\sqrt{n}log(1+\frac{n}{\sqrt{n}}))=\sqrt{n}log(1+\sqrt{n})=\sqrt{n}logn$
+
+$S\ =\ O(logn)$
 
 #### 13-4 Cost of Table Collect
 
 The following code implements Table.collect(S).
 
-$Seq.reduce (Table.union Seq.append) <> \{k-><v>:v\in S\}$
+$Seq.reduce (Table.union\ Seq.append) <> \{k-><v>:v\in S\}$
 
 Derive (tight) asymptotic upper bounds on the work and span for the code in terms of $n\ =\ |S|$. You can assume the comparison function used by the table takes constant work, and that the Sequence is a array sequence. You don't need a proof.
 
+seq.append操作需要的 $W=O(n+m),S=1$，table.union需要 $W=mlog(1+\frac{n}{m})$和$S=lg(n+m)$。
 
+得到递推关系式：$W(n)=2\cdot W(n/2)+O(n)+O(nlogn)$， 因此$W(n)=nlog^2n$。
 
+同样，$S(n)=S(n/2)+O(1)+log(2n)$， 得到$S(n)=log^2n$。
 
+#### 13-9 Domain search
 
+Continuing on our document indexing example discussed in Section 13.5, suppose that you wish to extend the kind of queries to include domain search. A domain search specifies a "domain" that identifies a subset of the documents and requires performing all the queries with respect to that domain. For example, the domain search "site:cs.cmu.edu parallel algorithms" on a search engine would search all pages that are in the "cs.cmu.edu" domain for the keywords "parallel algorithms".
 
-
-
+````pascal
+fun DomainSearch(domain, keywords) = 
+let
+	docs = iterate table.insert {} (website->doc: doc of website,website in domain);
+	words = makeIndex(docs);
+in
+	iterate (Set.intersection Table.find(words, w)) U < w : w in keywords >
+end;
+````
 

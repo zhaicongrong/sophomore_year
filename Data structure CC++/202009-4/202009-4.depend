@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1607384671 source:d:\sophomore_year\data structure cc++\202009-4\main.cpp
+	<bits/stdc++.h>
+	<cmath>
+	<algorithm>
+
