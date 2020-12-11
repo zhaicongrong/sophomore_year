@@ -127,7 +127,9 @@ fun select(T, i) =
 
 #### Exercise 12.8. Show that the work of the bulk operations is $O(n+m)$, i.e., never no more than the sum of the sizes of the inputs.
 
-由书本上得到的，intersect，union和difference的work都是$O(mlog(1+\frac{n}{m}))$。
+由书本上得到，intersect，union和difference的work都是$O(mlog(1+\frac{n}{m}))$。
+
+因为对于$x>0$，都有$log(1+x)<x<1+x$
 
 因此$O(mlog(1+\frac{n}{m}))\ <\ O(m\dot (1\ +\ \frac{n}{m})) = O(n\ +\ m)$
 
@@ -146,18 +148,6 @@ $fromseq\ A = R^{Set.union\  \varnothing}\ A$：得到有关work的递归式：$
 `privious(S, A) = Select(S, Rank(S, A) - 1)`
 
 `next(S, A) = select(S, Rank(S, A) + 1)`
-
-#### 13-1 Cost of bulk operations
-
-Show that the work of the bulk operations, intersection, difference, and union is $O(n+m)$, where n and m are the sum of the sizes of the inputs.
-
-(同exercise. 12.8)
-
-#### 13-2 implementing fromseq
-
-What is the work and span of each of the implementations of fromSeq in Example 13.8.
-
-(Exercise. 12.10)
 
 #### 13-3 Union on Different Sizes
 
@@ -181,17 +171,22 @@ seq.append操作需要的 $W=O(n+m),S=1$，table.union需要 $W=mlog(1+\frac{n}{
 
 同样，$S(n)=S(n/2)+O(1)+log(2n)$， 得到$S(n)=log^2n$。
 
-#### 13-9 Domain search
+#### 13-6 Union on Multiple Sets
 
-Continuing on our document indexing example discussed in Section 13.5, suppose that you wish to extend the kind of queries to include domain search. A domain search specifies a "domain" that identifies a subset of the documents and requires performing all the queries with respect to that domain. For example, the domain search "site:cs.cmu.edu parallel algorithms" on a search engine would search all pages that are in the "cs.cmu.edu" domain for the keywords "parallel algorithms".
+The following code takes the union of a sequence of sets:
 
-````pascal
-fun DomainSearch(domain, keywords) = 
-let
-	docs = iterate table.insert {} (website->doc: doc of website,website in domain);
-	words = makeIndex(docs);
-in
-	iterate (Set.intersection Table.find(words, w)) U < w : w in keywords >
-end;
-````
+`fun UnionSets(S) = Seq.reduce Set.Union {} S`
 
+For example
+
+`UnionSets <{5.7}, {3, 1, 5, 2}, {2, 5, 8}>`
+
+would return the set {1, 2, 3, 5, 7, 8}. Derive (tight) asymptotic upper bounds for the work and span for `UnionSets` in terms of $n=|S|$ and $m=\sum_{x\in S}|x|$. You can assume the comparison used for the sets takes constant work. Please keep your analysis to under a page. We do not need a formal proof. An explanation based on the tree-methond is sufficient.
+
+假设一种理想情况：每一个sequence长度都为$\frac{m}{n}$。
+
+$W=\frac{n}{2}\cdot \frac{m}{n}\cdot log2+\frac{n}{4}\cdot \frac{2m}{n}+...=mlogn$。
+
+$S=log\frac{m}{n}+log\frac{2m}{n}+log\frac{4m}{n}+...=\sum_{i=1}^{logn}i+lognlogm-{(logn)}^2=lognlogm$。
+
+由于$m>n$，有$S=lognlogm$作为上限。
