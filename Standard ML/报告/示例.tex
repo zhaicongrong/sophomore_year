@@ -64,30 +64,7 @@
 \tableofcontents
 \newpage
 \section{无重复排序}
-\begin{lstlisting}
-val N = getInt();
-val A = getIntTable(N);
 
-fun merge([], ys) = ys : int list
-  | merge(xs, []) = xs
-  | merge(x::xs, y::ys) = 
-    if x < y then x::merge(xs, y::ys)
-             else y::merge(x::xs, ys);
-
-fun mergesort xs = 
-    let fun sort(0, xs) = ([], xs)
-          | sort(1, x::xs) = ([x], xs)
-          | sort(n, xs) = 
-                let val (l1, xs1) = sort((n+1) div 2, xs)
-                    val (l2, xs2) = sort(n div 2, xs1)
-                in (merge (l1,l2), xs2)
-                end 
-        val (l, _) = sort (length xs, xs)
-    in l end;
-
-val B = mergesort(A);
-printIntTable(B);
-\end{lstlisting}
 \subsection{本关任务}
 给出一个具有$N$个互不相同元素的数组，请对它进行升序排序。
 \subsection{解法}
@@ -109,7 +86,43 @@ Merge($L, R$)}}
 \[
 W=O(n\log n)\quad S=O(\log^2n)
 \]
+\subsection{分析与证明}
+\begin{lstlisting}
 
+fun merge([], ys) = ys : int list
+  | merge(xs, []) = xs
+  | merge(x::xs, y::ys) = 
+    if x < y then x::merge(xs, y::ys)
+             else y::merge(x::xs, ys);
+\end{lstlisting}
+
+首先merge函数是对两个已经排序好的数字串进行排序，这样可以分为两种情况。第一种是两个数字串都不为空，那么直接比较两串头元素，较小的放在返回数字串的开头，再对剩下的数字串进行迭代操作。如果其中已经有一个数字串为空，那么直接返回剩下的所有数字串。因为每次返回的都是两个串中最小的元素，因此merge函数得到的数字串必定是从小到大有序排列的。
+
+\begin{lstlisting}
+fun mergesort xs = 
+    let fun sort(0, xs) = ([], xs)
+          | sort(1, x::xs) = ([x], xs)
+          | sort(n, xs) = 
+                let val (l1, xs1) = sort((n+1) div 2, xs)
+                    val (l2, xs2) = sort(n div 2, xs1)
+                in (merge (l1,l2), xs2)
+                end 
+        val (l, _) = sort (length xs, xs)
+    in l end;
+\end{lstlisting}
+
+mergesort操作本质上是首先利用sort函数将数字串分为两半，再利用mergesort进行两数字串的排序。sort(l, x)函数的两个参数分别是分出的左数字串的长度，和需要切分的数字串x，最后返回的就是排序好的字符串。在第6句中返回的x2已经是空值，而l2是已经排序好的子串。
+
+证明：显然，当sort函数第一个参数值等于需要排序数字串的长度时，返回值的第二个值就为空，即返回的第一个值包含了所有需要排序的数。并且已经在前面证明了merge函数的正确性，因此只需证明l1，和l2是有序数列。
+
+sort(n, x)返回值(l, y)，l是x的前n项的有序值，y是x的剩余项。当排序序列长度为1或2时显然成立。
+
+假设，长度为$2k$和$2k+1$的串在sort函数中能得到正确的结果。对于$2k+2$长度的串来说，最后一步是将两个有序长度为$n+1$的串进行合并。由于$2k+1$在sort函数中是正确的，即在处理的最后一步得到的$k+1$长度是有序的。因此sort处理长度为$2k+2$的串可以得到正确结果。
+
+
+
+
+\subsection{样例输入与输出}
 \section{最短路}
 \subsection{本关任务}
 给定一个带权无向图，一个源点，权值在边上。计算从源点到其他各点的最短路径。
