@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1608181311 source:d:\sophomore_year\data structure cc++\random\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+

@@ -12,7 +12,7 @@
 \usepackage{pdfpages}
 \usepackage[ruled,vlined,boxed,linesnumbered]{algorithm2e}
 \input{sml.tex}
-\geometry{left=4.0cm,right=4.0cm,top=5cm,bottom=5cm}
+\geometry{left=3.0cm,right=3.0cm,top=3cm,bottom=3cm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \DeclareMathOperator{\net}{net}
@@ -69,23 +69,20 @@
 给出一个具有$N$个互不相同元素的数组，请对它进行升序排序。
 \subsection{解法}
 我们可以采用归并排序算法解决。
-将数据分为
-即
+
+首先利用$\texttt{Mergesort}$将数据递归操作，首先将数据分为两半，再利用$\texttt{Merge}$进行归并。
 \begin{algorithm}
 \SetAlgoLined
 MergeSort($\langle a_n\rangle$) =\par
 \eIf{$|a_n|=1$}{$a_1$}{
 \LetIn{
-$L\longleftarrow $ MergeSort($\langle a_1,\ a_2,\ \ldots,\ a_{(n+1)/2}\rangle$)\;
-$R\longleftarrow $ MergeSort($\langle a_{(n+1)/2},\ \ldots,\ a_{n}\rangle$)\;
+$L\longleftarrow $ Sort($\langle a_1,\ a_2,\ \ldots,\ a_{(n+1)/2}\rangle$)\;
+$R\longleftarrow $ Sort($\langle a_{(n+1)/2},\ \ldots,\ a_{n}\rangle$)\;
 }{
 Merge($L, R$)}}
 \caption{MergeSort}
 \end{algorithm}\\
-复杂度为
-\[
-W=O(n\log n)\quad S=O(\log^2n)
-\]
+
 \subsection{分析与证明}
 \begin{lstlisting}
 fun merge([], ys) = ys : int list
@@ -95,7 +92,7 @@ fun merge([], ys) = ys : int list
              else y::merge(x::xs, ys);
 \end{lstlisting}
 
-首先merge函数是对两个已经排序好的数字串进行排序，这样可以分为两种情况。第一种是两个数字串都不为空，那么直接比较两串头元素，较小的放在返回数字串的开头，再对剩下的数字串进行迭代操作。如果其中已经有一个数字串为空，那么直接返回剩下的所有数字串。因为每次返回的都是两个串中最小的元素，因此merge函数得到的数字串必定是从小到大有序排列的。
+$\texttt{merge}$函数是对两个已经排序好的数字串进行排序，这样可以分为两种情况。第一种是两个数字串都不为空，那么直接比较两串头元素，较小的放在返回数字串的开头，再对剩下的数字串进行迭代操作。如果其中已经有一个数字串为空，那么直接返回剩下的所有数字串。因为每次返回的都是两个串中最小的元素，因此$\texttt{merge}$函数得到的数字串必定是从小到大有序排列的。
 
 \begin{lstlisting}
 fun mergesort xs = 
@@ -110,7 +107,7 @@ fun mergesort xs =
     in l end;
 \end{lstlisting}
 
-mergesort操作本质上是首先利用sort函数将数字串分为两半，再利用mergesort进行两数字串的排序。sort(l, x)函数的两个参数分别是分出的左数字串的长度，和需要切分的数字串x，最后返回的就是排序好的字符串。在第6句中返回的x2已经是空值，而l2是已经排序好的子串。
+$\texttt{Mergesort}$首先利用$\texttt{sort}$函数将数字串分为两半，再利用$\texttt{merge}$进行两数字串的排序。$\texttt{sort}$(l, x)函数的两个参数分别是分出的左数字串的长度，和需要切分的数字串x，最后返回的就是排序好的字符串。在第6句中返回的x2已经是空值，而l2是已经排序好的子串。
 
 证明：显然，当sort函数第一个参数值等于需要排序数字串的长度时，返回值的第二个值就为空，即返回的第一个值包含了所有需要排序的数。并且已经在前面证明了merge函数的正确性，因此只需证明l1，和l2是有序数列。
 
@@ -120,8 +117,9 @@ sort(n, x)返回值(l, y)，l是x的前n项的有序值，y是x的剩余项。�
 
 对于$k+1$长度的串来说，将会先分成两个长度为(k+2) div 2和(k+1) div 2的串排序，然后再通过merge操作归并。因此得到的$k+1$长度的串一定是有序的，证毕。
 
-复杂度分析：在进行归并操作时需要的$W(n)=n$，$S(n)=logn$，因此得到递推公式$W(n)=2W(\frac{n}{2})+O(n)$,$S(n)=S(\frac{n}{2})+O(logn)$，因此有$W(n)=nlogn$, $S(n)=log^2n$。
+时间复杂度分析：在进行归并操作$\texttt{merge}$时需要的$W(n)=n$，$S(n)=logn$。假设对于一组数得拆分仅需要常数时间，因此得到$\texttt{Mergesort}$的递推公式$W(n)=2W(\frac{n}{2})+O(n)$,$S(n)=S(\frac{n}{2})+O(logn)$，计算得有$W(n)=nlogn$, $S(n)=log^2n$。
 
+空间复杂度分析：在每一次进行$\texttt{merge}$排序时，都需要新的空间储存新生成的一组数。可以进行如下操作：首先开辟长度为$n$的空间储存所有通过$\texttt{merge}$操作排序的数，当排序好时就放到原来空间内。由于每一次并行操作时同一个数都不会同时出现在不同的$\texttt{merge}$操作中，因此不需要大于$n$的空间，因此空间复杂度位$O(n)$。
 
 \subsection{样例输入与输出}
 样例输入：
@@ -133,11 +131,23 @@ sort(n, x)返回值(l, y)，l是x的前n项的有序值，y是x的剩余项。�
 样例输出：
 
 6 9 10 17 60 103 155 172 174 200 
+
+样例分析：
+
+首先将10个数分为两组数$\left \langle10,155,200,9,60\right \rangle ,\left \langle 174,17,6,172,103\right \rangle $，继续调用$\texttt{Mergesort}$，直到数组的长度为1或0。最后会被分解成
+
+$\texttt{merge}(\texttt{merge}(\texttt{merge}(\texttt{merge}(10, 155), 200),\texttt{merge}(9, 60)),\texttt{merge}(\texttt{merge}(\texttt{merge}(174,17),6),\texttt{merge}(172,103))$
+
+$\texttt{merge}$操作就是对每组有序数组进行再次排序，最后一次调用$\texttt{merge}$时数据为
+
+$\texttt{merge}(\left \langle 9,10,60,155,200\right \rangle ,\left \langle 6,17,103,172,172\right \rangle)$。
+
+再次排序，最后得到结果$\left \langle 6,9,10,17,60,103,155,172,174,200\right \rangle$。
 \section{最短路}
 \subsection{本关任务}
 给定一个带权无向图，一个源点，权值在边上。计算从源点到其他各点的最短路径。
 \subsection{解法}
-可以采用Dijkstra算法解决该问题。
+这里采用Dijkstra算法解决该问题。
 
 利用二维数组保存两点之间的路径长度，即$A[i][j]$即是编号为$i-1$和$j-1$点之间的路径长度。若无给定长度，则用$\infty$来表示无法两点之间无法到达。创建一个一维数组dis，用以储存源点到每个点的距离。并且集合B为中只有源点a。
 
@@ -148,8 +158,42 @@ sort(n, x)返回值(l, y)，l是x的前n项的有序值，y是x的剩余项。�
 (3)重复上述步骤，直至集合B中有所有点。得到的数组dis的值就是源点到所有对应点的最短路径值。
 
 在最后输出最短路之前，再将所有长度为99999（表示$\inf$）的数据转化成~1说明没有此路径。
+
+\begin{algorithm}
+\SetAlgoLined
+Dijstra($\langle G\rangle$) =\par
+\LetIn{
+$dijstra\ X\ S$ =\par
+\eIf{$|s|=0$}
+{$X$}
+{\LetIn{
+$v=deleteMin\ S$\par
+$X'=X\cup \{v\}$\par
+$G'=iterate\ relax\ G\ (N_G^+(v))$}{$dijstra\ X'\ G'$}}
+}{
+$dijstra\ \{\}\ s_0$ \ \ \ \ \ \ \ \ \ \ \ (*$s_0$为源点*)}
+\caption{Dijstra}
+\end{algorithm}
 \subsection{分析与证明}
-分析：Dijkstra算法使用的迭代不超过$n-1$次，在每次迭代的运算中，即比较与更新一共不超过$2(n-1)$次，因此$W=O(n^2)$。每一次的迭代都不能并行运算，但是在每一次的迭代中的比较与收缩长度操作可以同时进行，因此$S=O(n)+1$。
+假设利用最小堆来存储源点到各点的距离。
+
+时间复杂度分析：Dijkstra算法在一共进行$|V|$次步骤(1)，在寻找长度最短值并维护堆时，需要的复杂度是$W=O(log|V|)$,$S=O(log|V|)$。选定最短长度后，开始对其他边进行收缩操作，因为要进行$|V|$次比较和更新长度，串行复杂度是$O(|V|)$，并行复杂度是$O(1)$。因此总的串行复杂度为$O(n^2)$。每一次的迭代都不能并行运算，因此并行复杂度$S=n^2$。由于两点之间本来没有通路，可能经过收缩可以通过，因此在分析时也将其算作一个临界点，即有$|E|=|V|^2$。如果没有这个条件，Dijkstra的复杂度为$W=O(|E|log|V|),S=O(|E|log|V|)$。
+
+证明：在deleteMin需要$O(logn)$，\texttt{union}操作需要$O(logn)$的复杂度,收缩长度使用迭代操作需要$O(n)$,得到递推式$T(n)=T(n-1)+2logn+n$，解得$T(n)=2logn!+\frac{n(n+1)}{2}$
+\[
+\lim\limits_{n\rightarrow \infty}{\frac{logn!}{logn^n}}=\lim\limits_{n\rightarrow \infty}{\frac{log(\sqrt{2\pi n}(\frac{n^n}{e^n}))}{nlogn}}
+\]
+\[=\lim\limits_{n\rightarrow \infty}{\frac{\frac{1}{2}log(2\pi)+\frac{1}{2}logn+nlogn-nloge}{nlogn}}=\lim\limits_{n\rightarrow \infty}{\frac{\frac{1}{2}log(2\pi)}{nlogn}+\frac{1}{2n}+1-\frac{1}{lnn}}=1
+\]
+因此$0\leq T(n)\leq 2nlogn+\frac{n^2}{2}+\frac{n}{2}$。
+对于并行时间复杂度，有$T(n)=T(n-1)+1+logn+n$，$S(n)\in O(N^2)$
+因此
+\[
+W(n)=n^2,S(n)=n^2
+\]
+
+空间复杂度分析：该算法利用邻接图存储，空间复杂度为$O(|V|^2)$，利用sequence来实现最小堆，存储源点到各点长度时，空间复杂度为$O(|V|)$。因此总的空间复杂度为$O(|V|^2)$。
+
 
 证明：
 设源点$O$到每一个顶点的距离为L(V)，P是一个顶点集，在最初过程中，P集合中只有源点。对于任意的$V\in P$，则$L(V)$是最短路径长度。
@@ -176,7 +220,6 @@ sort(n, x)返回值(l, y)，l是x的前n项的有序值，y是x的剩余项。�
 
 1 4 3
 
-
 7 2 2
 
 3 4 3
@@ -199,7 +242,53 @@ sort(n, x)返回值(l, y)，l是x的前n项的有序值，y是x的剩余项。�
 
 4 6 7 7 0 3 5 
 
+样例分析：
 
+首先得到邻接表：
+\[
+\left[
+    \begin{array}{ccccccc}
+        0 & \infty & \infty & 3 & \infty & 1 & \infty \\
+        \infty & 0 & \infty & 2 & \infty & \infty & 1 \\
+        \infty & \infty & 0 & 3 & \infty & 4 & 3 \\
+        3 & 2 & 3 & 0 & \infty & \infty & \infty \\
+        \infty & \infty & \infty & \infty & 0 & 3 & 5 \\
+        1 & \infty & 4 & \infty & 3 & 0 & \infty \\
+        \infty & 2 & 3 & \infty & 5 & \infty & 0
+    \end{array}
+\right]
+\]
+
+dis数组数值为
+\[
+\left[
+	\begin{array}{ccccccc}
+		\infty & \infty & \infty & \infty & 0 & 3 & 5
+	\end{array}
+\right]
+\]
+
+首先将源点5加入$X$集合中。
+
+选取距离源点最短的点6，对除$X$集合外的所有点$w$进行收缩，$dis[w]=min\{G[w][6]+dis[6],dis[w]\}$，以此更新dis数组。
+
+得到收缩后的结果为
+\[
+\left[
+	\begin{array}{ccccccc}
+		4 & \infty & 7 & \infty & 0 & 3 & 5
+	\end{array}
+\right]
+\]
+
+下面步骤同理，最后得到dis函数数值为
+\[
+\left[
+	\begin{array}{ccccccc}
+		4 & 6 & 7 & 7 & 0 & 3 & 5
+	\end{array}
+\right]
+\]
 \section{最大括号距离}
 \subsection{本关任务}
 我们定义一个串s是闭合的，当且仅当它由'('和')'构成，而且满足以下条件之一：
@@ -212,34 +301,60 @@ sort(n, x)返回值(l, y)，l是x的前n项的有序值，y是x的剩余项。�
 
 现在给你一个串，你需要找出所有这个串中匹配的子串（一个闭合的串，并且外侧由括号包裹）中最长的那个，输出它的长度。
 \subsection{解法}
-现在采用一个stack函数来储存括号的栈。
+我使用一个stack函数来储存左括号序号的栈。
 
-当栈为空时，判断下一个要入栈的括号的类型：如果是右括号，则必定不会有与之匹配的括号，直接丢弃该右括号；如果时左括号，就将左括号压栈。并在每次栈为空时更新当前最大的匹配括号长度。
+当栈为空时，判断下一个要入栈的括号的类型：如果是右括号，则必定不会有与之匹配的括号，直接跳过右括号；如果是左括号，就将左括号的序号压栈。并在每次栈为空时更新当前最大的匹配括号长度。
 
-当栈不为空时，如果栈顶元素是左括号，即将压栈的括号是右括号，就直接弹出栈顶元素，并增加当前括号距离2。否则将新元素压栈。
+当栈不为空时，若扫描到的是左括号，继续将左括号的序号压栈。如果是右括号，即右括号和栈顶的左括号匹配，将栈顶序号弹出，两括号的距离即是两序号之差，与当前括号最大距离进行比较，并更新最大括号距离。
 
-由于这种解法只能够解决括号串整体匹配和右括号多于左括号的情况，因此需要将原来的括号串每个元素置换并颠倒，得到新的最大匹配长度不变但括号冗余情况完全相反的括号串。两个串同时经过stack函数的处理，得到的最小的值就是括号匹配的最大的距离。
+\begin{algorithm}
+\SetAlgoLined
+LongestDistance($\langle G\rangle$) =\par
+\LetIn{
+$dijstra\ X\ S$ =\par
+\eIf{$|s|=0$}
+{$X$}
+{\LetIn{
+$v=deleteMin\ S$\par
+$X'=X\cup \{v\}$\par
+$G'=iterate\ relax\ G\ (N_G^+(v))$}{$dijstra\ X'\ G'$}}
+}{
+$dijstra\ \{\}\ s_0$ \ \ \ \ \ \ \ \ \ \ \ (*$s_0$为源点*)}
+\caption{LongestDistance}
+\end{algorithm}
 
+\subsection{分析与证明}
 关键函数stack的代码如下：
 \begin{lstlisting}
-fun stack([], _, maxpair, tmppair) = Int.max(maxpair, tmppair)
-  | stack(x::xs, [], maxpair, tmppair) = 
-        if(x=0) 
-            then stack(xs, [x], Int.max(maxpair, tmppair), 0)
-            else stack(xs, [], Int.max(maxpair, tmppair), 0)
-  | stack(x::xs, y::ys, maxpair, tmppair) = 
-        if((x=1) andalso (y=0)) 
-            then stack(xs, ys, maxpair, tmppair+2)
-            else stack(xs, x::y::ys, maxpair, tmppair);
+fun stack([], _, maxpair, index) = maxpair
+  | stack(x::xs, [], maxpair, index)= 
+    if(x=0)
+        then
+            stack(xs, [index], maxpair, index+1)
+        else
+            stack(xs, [], maxpair, index+1)
+  | stack(x::xs, y::ys, maxpair, index) = 
+    if(x=1)
+    then stack(xs, ys, Int.max(index-y+1, maxpair), index+1)
+    else stack(xs, index::y::ys, maxpair, index+1);
 \end{lstlisting}
-\subsection{分析与证明}
-字符串元素的置换和反转都需要$O(n)$的$W$和$O(1)$、$O(n)$的$S$。
+时间复杂度分析：该算法对一串括号进行线性扫描操作，因此并行复杂度与串行复杂度相等。在扫描每一个括号时，都要对括号类型进行判断，进行压栈、更新最大距离等操作，都需要常数时间，因此时间复杂度只与括号串的长度有关。时间复杂度为$W=O(n),S=(n)$。
 
-stack函数只需要扫描整个list一遍，因此串行需要的$W$是$O(n)$，$S$也是$O(n)$。
+证明：
+
+此算法无法并行处理，串行时间复杂度和并行时间复杂度相同。有递推式$T(n)=T(n-1)+1$,因此有
+\[
+	W(n)=O(n),S(n)=O(n)
+\]
+
+空间复杂度分析：$\texttt{stack}$函数的第一个参数和第二个参数都至多需要储存长度为$n$的序列，因此空间复杂度为$O(n)$。此空间复杂度易证。
+
 \subsection{样例输入与输出}
 样例输入：
 
-50 1 0 1 0 1 1 0 0 1 0 1 1 1 1 0 0 1 0 1 1 1 0 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 1 0 1 1 1 1 0 0 0
+50 
+
+1 0 1 0 1 1 0 0 1 0 1 1 1 1 0 0 1 0 1 1 1 0 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 1 0 1 1 1 1 0 0 0
 
 样例输出：
 
@@ -252,16 +367,117 @@ stack函数只需要扫描整个list一遍，因此串行需要的$W$是$O(n)$�
 
 输出是以$[[x_1,y_1],[x_2, y_2],[x_3, y_3], ... ]$ 格式的“关键点”的列表，它们唯一地定义了天际线。关键点是水平线段的左端点。请注意，最右侧建筑物的最后一个关键点仅用于标记天际线的终点，并始终为零高度。此外，任何两个相邻建筑物之间的地面都应被视为天际线轮廓的一部分。
 \subsection{解法}
+可以使用分治方法进行处理。
+
+三元组$[L_i，H_i，R_i]$可以看成一个基础轮廓，即$[(L_i, H_i), (R_i, 0)]$。读入所有数据，即有$n$组基础轮廓。
+
+\begin{lstlisting}
+fun execute(0, xs) = ([], xs)
+  | execute(1, x::xs) = (x, xs)
+  | execute(n, xs) = 
+    let
+        val (l1, xs1) = execute((n+1) div 2, xs);
+        val (l2, xs2) = execute(n div 2, xs1);
+    in
+        (merge(l1, l2), xs2)
+    end;
+\end{lstlisting}
+
+(1)当轮廓数为1或0时，直接返回该轮廓。
+
+(2)当轮廓数大于等于2时，将其分成两组轮廓，分别进行组合。
+
+\begin{lstlisting}
+fun merge(l1, l2) = 
+    let
+        fun myexecute([], [], _, _, last) = []
+            | myexecute(l1, [], _, _, last) = l1
+            | myexecute([], l2, _, _, last) = l2
+            | myexecute((x1, hx1)::l1, (x2, hx2)::l2, h1, h2, last) = 
+                if(x1 < x2)
+                    then
+                        if(Int.max(hx1, h2) = last)
+                            then
+                                myexecute(l1, (x2, hx2)::l2, hx1, h2, last)
+                            else
+                            (x1, Int.max(hx1, h2))::myexecute(l1, (x2, hx2)::l2, hx1, h2, Int.max(hx1, h2))
+                    else
+                        if(x1 = x2)
+                            then
+                                if(Int.max(hx1, hx2) = last)
+                                then
+                                    myexecute(l1, l2, hx1, hx2, last)
+                                else
+                                    (x1, Int.max(hx1, hx2))::myexecute(l1, l2, hx1, hx2, Int.max(hx1, hx2))
+                            else
+                                if(Int.max(hx2, h1) = last)
+                                then
+                                    myexecute((x1, hx1)::l1, l2, h1, hx2, last)
+                                else
+                                    (x2, Int.max(hx2, h1))::myexecute((x1, hx1)::l1, l2, h1, hx2, Int.max(hx2, h1));
+    in
+        myexecute(l1, l2, 0, 0, ~1)
+    end;
+\end{lstlisting}
+
+Merge操作是对两个轮廓，$S1$和$S2$进行合并。
+
+设h1,h2分别为两个轮廓当前的高度，$x1$和$x2$分别为未处理的两个串的横坐标，用变量$last$表示最后一个加入新轮廓的高度。
+
+如果$x1\ >\ x2$，将$h2$更新为$x2$对应的高度。将$(x2, max(h1, h2))$加入新轮廓，如果last值与x2对应的高度不相等。
+
+同理，若$x1\ <\ x2$，将$h1$更新为$x1$对应的高度。将$(x1, max(h1, h2))$加入新轮廓，如果last值与$x1$对应的高度不相等。
+
+当$x1\ =\ x2$，也有相同的操作。
+
 \subsection{分析与证明}
+
+在拆分轮廓时仅需要常量时间。当两个长度为n的轮廓进行合并时，需要线性扫描两轮廓，在处理时也需要常数时间，时间复杂度为$O(2n)$，得到递推式$W(n)=2W(\frac{n}{2})+O(n)$，因此$W(n)=nlogn$。每一个合并操作都可以并行进行处理，时间复杂度为$O(logn)$，递推式为$S(n)=S(\frac{n}{2})+logn$，因此$S(n)=log^2n$。
+
+对于所需空间，首先储存读入数据需要O(2n)的空间，在每次Merge操作中都需要创建新的空间存储处理的数据，而对于每一层的拆分并不需要每次都开辟新的空间，在最初直接开辟O(2n)的空间进行所有Merge操作就足够。因此空间复杂度为O(n)。
+
 \subsection{样例输入与输出}
+样例输入：
+
+4
+
+1 3 4
+
+3 2 11
+
+6 6 8
+
+7 4 10
+
+样例输出：
+
+1 3 
+
+4 2 
+
+6 6 
+
+8 4 
+
+10 2 
+
+11 0 
 \section{括号匹配}
 \subsection{本关任务}
 给定一个括号序列，判断它是否是匹配的。注意( ) ( ) 在本题也当做匹配处理。
 \subsection{解法}
-
+定义左括号为1，右括号为-1。从左至右进行加法，初始值为0。如果在计算过程中中间过程小于零，则括号序列不匹配，如果最后结果不为零，括号序列也不匹配。
 
 \subsection{分析与证明}
+？
 \subsection{样例输入与输出}
+样例输入：
+40 
+
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 1 0 1 1 1 1 1 0 0 1 1 1 1 1 1 1 1 1
+样例输出：
+
+1
 \section{高精度整数}
 \subsection{本关任务}
 给定两个任意精度的整数a和b，满足a$\geq$b，求出a+b, a−b, a×b的值。
@@ -304,10 +520,7 @@ $c\ =\ 0$}
 Addition($a,\ b,\ result,\ c,\ i+1$)}}
 \caption{subtraction}
 \end{algorithm}
-\\
-\\
-\\
-\\
+
 \subsubsection{乘法的计算}
 先将多位数相乘转换为多个一位数与多位数相乘的乘法。
 
@@ -362,7 +575,52 @@ dfn[ ]表示在深度优先搜索时遍历的时间戳，每访问到一个新�
 当满足low[v]$\geq$ dfn[u]，说明V-U是桥。
 \subsection{分析与证明}
 \subsection{样例结果与输出}
+\section{静态区间查询}
+\subsection{本关任务}
+给定一个长度为$N$的数列，和$M$次询问，求出每一次询问的区间内数字的最大值。
+\subsection{解法}
+设二维数组$dp[i][j]$表示的是区间$[i,\ j]$的最大值。
 
+(1) dp[ i ][ i ] = arr[ i ]
+
+(2)易得$dp[\ i\ ][\ j+1\ ]\ =\ max(dp[\ i\ ][\ j\ ],\ arr[\ j\ ])$，迭代计算每一个dp值。
+
+(3)读入一组区间，直接查询对应的dp数组值。
+\subsection{分析与证明}
+对于解法的第一步，初始化$n$个二维数组dp的值，串行复杂度为$O(n)$，并行复杂度为$O(1)$。
+对于解法第二步，固定左区间端点更新dp数组，判断与更新都是串行的，Work和Span都是$O(n)$的复杂度。需要进行$n$个区间端点的更新，这里可以进行并行处理，因此该算法串行复杂度为$O(n^2)$，并行复杂度为$O(n)$。
+
+设需要查找的次数为$M$，则查找过程的Work为$O(M)$，Span为$O(1)$。
+
+得到$W=O(N^2+M),S=(N)$。
+
+
+\subsection{样例结果与输出}
+样例输入：
+
+8 8
+
+9 3 1 7 5 6 0 8
+
+1 6
+
+1 5
+
+2 7
+
+2 6
+
+1 8
+
+4 8
+
+3 7
+
+1 8
+
+样例输出：
+
+9 9 7 7 9 8 7 9
 \section{素性测试}
 \subsection{本关任务}
 给定一个数$N$，判断它是否是素数。
@@ -385,21 +643,7 @@ dfn[ ]表示在深度优先搜索时遍历的时间戳，每访问到一个新�
 
 (4)根据费马定理判断$a^{p-1}\equiv 1(mod\ p)$是否成立。如果成立，则从第(2)步重新挑选更大的质数$a$再次判断。
 
-\begin{algorithm}
-\SetAlgoLined
-MergeSort($\langle a_n\rangle$) = \par
-\eIf{$|a_n|=1$}{$a_1$}{
-\LetIn{
-$L\longleftarrow $ MergeSort($\langle a_1,\ a_2,\ \ldots,\ a_{(n+1)/2}\rangle$)\;
-$R\longleftarrow $ MergeSort($\langle a_{(n+1)/2},\ \ldots,\ a_{n}\rangle$)\;
-}{
-Merge($L, R$)}}
-\caption{MergeSort}
-\end{algorithm}
-复杂度为
-\[
-W=O(n\log n)\quad S=O(\log^2n)
-\]
+
 \subsection{分析与证明}
 
 \subsection{样例结果与输出}
