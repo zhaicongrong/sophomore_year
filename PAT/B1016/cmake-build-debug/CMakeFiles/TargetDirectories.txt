@@ -1,0 +1,3 @@
+D:/sophomore_year/PAT/B1016/cmake-build-debug/CMakeFiles/B1016.dir
+D:/sophomore_year/PAT/B1016/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/sophomore_year/PAT/B1016/cmake-build-debug/CMakeFiles/rebuild_cache.dir
