@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.4.16)  10 JAN 2021 21:11
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.4.16)  11 JAN 2021 07:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -834,23 +834,7 @@ Package caption Info: End \AtBeginDocument code.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 \c@lstlisting=\count324
-File: cover.pdf Graphic file (type pdf)
-<use cover.pdf>
-File: cover.pdf Graphic file (type pdf)
-<use cover.pdf>
-File: cover.pdf Graphic file (type pdf)
-<use cover.pdf, page 1>
-File: cover.pdf Graphic file (type pdf)
-<use cover.pdf, page 1>
-File: cover.pdf Graphic file (type pdf)
-<use cover.pdf, page 1>
-File: cover.pdf Graphic file (type pdf)
-<use cover.pdf, page 1>
-File: cover.pdf Graphic file (type pdf)
-<use cover.pdf, page 1>
-[1
-
-] (./示例.toc
+(./示例.toc
 LaTeX Font Info:    Trying to load font information for U+msa on input line 2.
  (c:/texlive/2020/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -864,11 +848,13 @@ LaTeX Font Info:    Font shape `TU/SimSun(0)/m/sl' in size <10.53937> not avail
 able
 (Font)              Font shape `TU/SimSun(0)/m/it' tried instead on input line 
 35.
- [2])
+ [1
+
+])
 \tf@toc=\write4
 \openout4 = `示例.toc'.
 
- [3]
+ [2]
 
 Package fontspec Info: Could not resolve font "FangSong/BI" (it probably
 (fontspec)             doesn't exist).
@@ -892,7 +878,7 @@ Package fontspec Info: Font family 'FangSong(0)' created for font 'FangSong'
 (fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
 (fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
 
- [4]
+ [3]
 File: 空间.png Graphic file (type bmp)
 <空间.png>
 File: 1-example1.png Graphic file (type bmp)
@@ -937,10 +923,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 130--142
 
  []
 
-[5]
+[4]
 File: 1-example3.png Graphic file (type bmp)
 <1-example3.png>
- [6] [7] [8] [9] [10] [11]
+ [5] [6] [7] [8] [9] [10]
 Underfull \hbox (badness 10000) in paragraph at lines 400--402
 
  []
@@ -950,7 +936,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 415--417
 
  []
 
-[12] [13]
+[11] [12]
 File: Addition.png Graphic file (type bmp)
 <Addition.png>
 
@@ -960,7 +946,7 @@ Overfull \hbox (1.35046pt too wide) in paragraph at lines 472--473
 
 File: Substraction.png Graphic file (type bmp)
 <Substraction.png>
-[14] [15] [16] [17]
+[13] [14] [15] [16]
 File: picture1.png Graphic file (type bmp)
 <picture1.png>
 File: picture2.png Graphic file (type bmp)
@@ -977,9 +963,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 608--610
 
 File: picture3.png Graphic file (type bmp)
 <picture3.png>
-[18] [19] [20]
+[17] [18] [19]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 739.
- [21] [22]
+ [20] [21]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 739.
  (./示例.aux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 739.
@@ -989,12 +975,12 @@ Package rerunfilecheck Info: File `示例.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 739.
  ) 
 Here is how much of TeX's memory you used:
- 21123 strings out of 479418
- 418247 string characters out of 5888105
+ 21114 strings out of 479418
+ 418103 string characters out of 5888105
  753991 words of memory out of 5000000
- 38288 multiletter control sequences out of 15000+600000
+ 38281 multiletter control sequences out of 15000+600000
  538688 words of font info for 83 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  56i,23n,68p,504b,1142s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on 示例.pdf (22 pages).
+Output written on 示例.pdf (21 pages).
