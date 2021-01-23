@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1610788593 source:d:\sophomore_year\data structure cc++\kmp\main.cpp
+	<iostream>
+	<cstdio>
+	<string>
+	<stdlib.h>
+

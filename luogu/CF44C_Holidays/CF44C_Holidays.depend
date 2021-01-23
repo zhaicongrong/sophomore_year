@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1611019851 source:d:\sophomore_year\luogu\cf44c_holidays\main.cpp
+	<iostream>
+	<cstdio>
+	<vector>
+

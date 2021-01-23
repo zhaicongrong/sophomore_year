@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1611026085 source:d:\sophomore_year\luogu\p1160\main.cpp
+	<iostream>
+	<cstdio>
+	<vector>
+

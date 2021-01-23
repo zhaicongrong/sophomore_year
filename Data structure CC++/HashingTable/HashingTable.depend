@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1610677857 source:d:\sophomore_year\data structure cc++\hashingtable\main.cpp
+	<cstdio>
+	<iostream>
+	<math.h>
+

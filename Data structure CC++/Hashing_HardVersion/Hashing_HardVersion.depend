@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1610693062 source:d:\sophomore_year\data structure cc++\hashing_hardversion\main.cpp
+	<iostream>
+	<cstdio>
+	<vector>
+	<set>
+
